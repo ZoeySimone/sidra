@@ -1,0 +1,50 @@
+syntax = "proto3";
+package sidra;
+option go_package="/options";
+import "google/protobuf/descriptor.proto";
+
+message FileOptions {
+    // define Terraform provider name
+    string Name = 1;
+}
+
+message MethodOptions {
+    // operation type, one of: Create, Read, Update, Delete, Exists
+    string Operation = 1;
+    // resource the method is operating on
+    string Resource = 2;
+}
+
+message MessageOptions {
+    // custom resource name
+    string ResourceName = 1;
+    // prevents a resource from being generated for a message
+    bool Ignore = 2;
+}
+
+message FieldOptions {
+    // avoids adding field to the resource
+    bool Ignore = 1;
+    // marks field in Terraform as sensitive
+    bool Sensitive = 2;
+    // define which field to use as an ID for the resource, only one field may be an ID
+    bool ID = 3;
+    // define whether value is computed, required or optional
+    string Behaviour = 4;
+}
+
+extend google.protobuf.FileOptions {
+    optional sidra.FileOptions Provider = 1234;
+}
+
+extend google.protobuf.MessageOptions{
+    optional sidra.MessageOptions Resource = 1234;
+}
+
+extend google.protobuf.FieldOptions {
+    optional sidra.FieldOptions Field = 1234;
+}
+
+extend google.protobuf.MethodOptions {
+    optional sidra.MethodOptions Method = 1234;
+}
